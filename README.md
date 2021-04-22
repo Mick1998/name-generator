@@ -13,7 +13,7 @@ The library currently supports the following:
 
 - **Name Generation**. The library generates a name randomly from a list of given names, organized through gender and country of origin.
 
-- **Surname Generation**. The library generates a surname randomly from a list of given names, organized through country of origin.
+- **Surname Generation**. The library generates a surname randomly from a list of surnames, organized through country of origin.
 
 - **Full Name**. Easily append one or more names and surnames to generate a full name with an intuitive API.
 
