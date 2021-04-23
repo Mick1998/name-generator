@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../namegen.hpp"
+#include "../dasmig/namegen.hpp"
 
 int main()
 {
