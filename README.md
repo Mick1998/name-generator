@@ -49,7 +49,7 @@ The library currently supports the following:
 using ng = dasmig::ng;
 ```
 
-to the files you want to generate names/surnames and set the necessary switches to enable C++11 (e.g., `-std=c++11` for GCC and Clang).
+to the files you want to generate names/surnames and set the necessary switches to enable C++17 (e.g., `-std=c++17` for GCC and Clang).
 
 Additionally you must supply the name generator with the [`resources`](https://github.com/dasmig/name-generator/resources) folder also available in the [release](https://github.com/dasmig/name-generator/releases).
 
