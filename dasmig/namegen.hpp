@@ -4,6 +4,8 @@
 #include <map>
 #include <memory>
 #include <random>
+#include <filesystem>
+#include <fstream>
 
 // Written by Diego Dasso Migotto - diegomigotto at hotmail dot com
 namespace dasmig
@@ -69,7 +71,7 @@ namespace dasmig
                     
                 private:
                     // Private constructor, this is mostly a helper class to the name generator, not the intended API.
-                    name(std::string name_str, gender gender, culture culture) : _internal_string(name_str), _gender(gender), _culture(culture) {}
+                    name(const std::string& name_str, gender gender, culture culture) : _internal_string(name_str), _gender(gender), _culture(culture) {}
 
                     // Internal string containing all name and appended surnames.
                     std::string _internal_string;
@@ -88,13 +90,21 @@ namespace dasmig
             static ng& instance() { static ng instance; return instance; }
 
             // Translates ISO 3166 2-letter country code to internal culture enum, unknown or unsupported code will be translated as any.
-            static culture to_culture(std::string country_code) { return (_country_code_map.find(country_code) != _country_code_map.end()) ? _country_code_map.at(country_code) : culture::any; }
+            static culture to_culture(const std::string& country_code) { return (_country_code_map.find(country_code) != _country_code_map.end()) ? _country_code_map.at(country_code) : culture::any; }
 
             // Generates a first name based on requested gender and culture.
             name get_name(gender gender = gender::any, culture culture = culture::any) const { return solver(true, gender, culture); };
             
             // Generates a surname based on requested culture.
-            name get_surname(culture culture = culture::any) const { return solver(false, gender::any, culture); };
+            name get_surname(culture culture = culture::any) const { return solver(false, gender::any, culture); };       
+
+            // Try loading every possible names file from the received resource path.
+            void load(const std::filesystem::path& resource_path) 
+            { 
+                for (auto& f : std::filesystem::recursive_directory_iterator(resource_path))
+                    if (f.is_regular_file() && (f.path().extension() == ".names"))
+                        parse_file(f);
+            };
 
         private:
             // Typedef to avoid type horror when defining a pointer to a container of names.
@@ -122,6 +132,9 @@ namespace dasmig
                 { "ua" , culture::ukrainian }
             };
 
+            // Default folder to look for names and surnames resources. 
+            static const inline std::filesystem::path _default_resources_path = "resources";
+
             // Maps for accessing male name through culture.
             std::map<culture, name_container> _culture_indexed_m_names;
 
@@ -132,13 +145,14 @@ namespace dasmig
             std::map<culture, name_container> _culture_indexed_surnames;
 
             // Initialize random generator, no complicated processes.
-            ng() {};
+            ng() { load(_default_resources_path); };
 
             // We don't manage any resource, all should gracefully deallocate by itself.
             ~ng() {};
 
             // Contains logic to retrieve a random name/surname from the containers. 
-            name solver(bool is_name, gender requested_gender, culture requested_culture) const {
+            name solver(bool is_name, gender requested_gender, culture requested_culture) const 
+            {
                 // Utilized in case gender or culture is any.
                 static std::random_device random_device;
 
@@ -167,20 +181,26 @@ namespace dasmig
                     switch (requested_gender)
                     {
                         case gender::m:
+                        {
                             // Distribution of possible names.
                             std::uniform_int_distribution<std::size_t> names_range(0, _culture_indexed_m_names.at(requested_culture)->size() - 1);
                             // Randomly select a name of the requested gender and culture.
                             return name(_culture_indexed_m_names.at(requested_culture)->at(names_range(random_device)), requested_gender, requested_culture);
+                        }
                         case gender::f:
+                        {
                             // Distribution of possible names.
                             std::uniform_int_distribution<std::size_t> names_range(0, _culture_indexed_f_names.at(requested_culture)->size() - 1);
                             // Randomly select a name of the requested gender and culture.
                             return name(_culture_indexed_f_names.at(requested_culture)->at(names_range(random_device)), requested_gender, requested_culture);
+                        }
                         default:
+                        {
                             // Distribution of possible names.
                             std::uniform_int_distribution<std::size_t> names_range(0, _culture_indexed_m_names.at(requested_culture)->size() - 1);
                             // Randomly select a name of the requested gender and culture.
                             return name(_culture_indexed_m_names.at(requested_culture)->at(names_range(random_device)), requested_gender, requested_culture);
+                        }
                     }
                 }
                 else
@@ -190,7 +210,64 @@ namespace dasmig
                     // Randomly select a surname of the requested culture.
                     return name(_culture_indexed_surnames.at(requested_culture)->at(surnames_range(random_device)), requested_gender, requested_culture);
                 }
-            };       
+            };
+
+            // Translates possible gender strings to gender enum.
+            static gender to_gender(const std::string& gender_string) 
+            {
+                static const std::map<std::string, gender> gender_map = {
+                    { "m", gender::m },
+                    { "f", gender::f },
+                    { "male", gender::m },
+                    { "female", gender::f }
+                };
+
+                return (gender_map.find(gender_string) != gender_map.end()) ? gender_map.at(gender_string) : gender::any; 
+            }
+
+            // Try parsing the names file and index it into our container.
+            void parse_file(const std::filesystem::path& file) 
+            {
+                // Expected names file format is <ISO 3166 2-letter country code>, <m(ale)|f(emale)|s(urname)>, list of names.
+                std::ifstream tentative_file(file);
+
+                // If managed to open the file proceed.
+                if (tentative_file.is_open())
+                {
+                    // Expected delimiter character.
+                    const char delimiter(',');
+
+                    // Line being read from the file.
+                    std::string file_line;
+
+                    // Culture read from file header.
+                    culture culture_read = culture::any;
+
+                    // Gender read from file header.
+                    gender gender_read = gender::any;
+
+                    // List of parsed names.
+                    name_container names_read = name_container();
+
+                    if (std::getline(tentative_file, file_line, delimiter))
+                    {
+                        culture_read = to_culture(file_line);
+                    }
+
+                    if (culture_read != culture::any)
+                    {
+                        if (std::getline(tentative_file, file_line, delimiter))
+                        {
+                            gender_read = to_gender(file_line);
+                        }
+                    }
+
+                    while (std::getline(tentative_file, file_line, delimiter))
+                    {
+                        names_read->push_back(file_line);
+                    }
+                }
+            }
 
     };
 
