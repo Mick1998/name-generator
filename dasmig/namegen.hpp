@@ -235,7 +235,7 @@ namespace dasmig
                 if (tentative_file.is_open())
                 {
                     // Expected delimiter character.
-                    const char delimiter(',');
+                    const char delimiter('\n');
 
                     // Line being read from the file.
                     std::string file_line;
@@ -247,24 +247,49 @@ namespace dasmig
                     gender gender_read = gender::any;
 
                     // List of parsed names.
-                    name_container names_read = name_container();
+                    name_container names_read = std::make_shared<std::vector<std::string>>();
 
+                    // Retrieves culture from file being read.
                     if (std::getline(tentative_file, file_line, delimiter))
                     {
                         culture_read = to_culture(file_line);
                     }
 
+                    // We can't continue without a valid culture.
                     if (culture_read != culture::any)
                     {
+                        // Retrieves gender, if unable to parse a gender it should be a surname file.
                         if (std::getline(tentative_file, file_line, delimiter))
                         {
                             gender_read = to_gender(file_line);
                         }
-                    }
+                            
+                        // Retrieves list of names.
+                        while (std::getline(tentative_file, file_line, delimiter))
+                        {
+                            names_read->push_back(file_line);
+                        }
 
-                    while (std::getline(tentative_file, file_line, delimiter))
-                    {
-                        names_read->push_back(file_line);
+                        // Correctly index container.
+                        switch (gender_read)
+                        {
+                            case gender::m:
+                            {
+                                _culture_indexed_m_names.emplace(culture_read, names_read);
+                                break;
+                            }
+                            case gender::f:
+                            {
+                                _culture_indexed_f_names.emplace(culture_read, names_read);
+                                break;
+                            }
+                            case gender::any:
+                            default:
+                            {
+                                _culture_indexed_surnames.emplace(culture_read, names_read);
+                                break;
+                            }
+                        }
                     }
                 }
             }
