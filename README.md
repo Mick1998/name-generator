@@ -35,7 +35,7 @@ The library currently supports the following:
   - [ ] Turkey
   - [ ] Ukraine
   - [ ] United Kingdom
-  - [ ] United States of America
+  - [x] United States of America
 
 
 ## Integration
