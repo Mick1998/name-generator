@@ -19,19 +19,19 @@ The library currently supports the following:
 
 - **Countries Supported**. Currently the following countries are supported by the library and contain a relevant database (unchecked countries are currently lacking or contain an incomplete database): 
   - [ ] Australia
-  - [ ] Brazil
+  - [X] Brazil
   - [ ] Bulgaria
   - [ ] Canada
   - [ ] China
-  - [ ] Denmark
-  - [ ] Finland
+  - [X] Denmark
+  - [X] Finland
   - [x] France
-  - [ ] Germany
+  - [X] Germany
   - [ ] Kazakhstan
-  - [ ] Norway
+  - [X] Norway
   - [ ] Poland
   - [ ] Russia
-  - [ ] Sweden
+  - [X] Sweden
   - [ ] Turkey
   - [ ] Ukraine
   - [ ] United Kingdom
