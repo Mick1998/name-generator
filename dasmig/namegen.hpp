@@ -52,29 +52,29 @@ namespace dasmig
             {
                 public:
                     // Method to append a name to the generated name (useful for composed forenames).
-                    name append_name() { _internal_string.append(" ").append(ng::instance().get_name(_gender, _culture)); return *this; }
+                    name append_name() { _internal_string.append(L" ").append(ng::instance().get_name(_gender, _culture)); return *this; }
 
                     // Method to append a name to the generated name (useful for composed forenames).
-                    name append_name(culture culture) { _internal_string.append(" ").append(ng::instance().get_name(_gender, culture)); return *this; }
+                    name append_name(culture culture) { _internal_string.append(L" ").append(ng::instance().get_name(_gender, culture)); return *this; }
 
                     // Method to append a surname to the generated name.
-                    name append_surname() { _internal_string.append(" ").append(ng::instance().get_surname(_culture)); return *this; }
+                    name append_surname() { _internal_string.append(L" ").append(ng::instance().get_surname(_culture)); return *this; }
 
                     // Method to append a surname to the generated name.
-                    name append_surname(culture culture) { _internal_string.append(" ").append(ng::instance().get_surname(culture)); return *this; }
+                    name append_surname(culture culture) { _internal_string.append(L" ").append(ng::instance().get_surname(culture)); return *this; }
                     
                     // Operator string to allow for implicit conversion to string.
-                    operator std::string() const { return _internal_string; }
+                    operator std::wstring() const { return _internal_string; }
                     
                     // Operator ostream streaming internal string.
-                    friend std::ostream& operator<<(std::ostream& os, const name& name) { os << name._internal_string; return os; }
+                    friend std::wostream& operator<<(std::wostream& os, const name& name) { os << name._internal_string; return os; }
                     
                 private:
                     // Private constructor, this is mostly a helper class to the name generator, not the intended API.
-                    name(const std::string& name_str, gender gender, culture culture) : _internal_string(name_str), _gender(gender), _culture(culture) {}
+                    name(const std::wstring& name_str, gender gender, culture culture) : _internal_string(name_str), _gender(gender), _culture(culture) {}
 
                     // Internal string containing all name and appended surnames.
-                    std::string _internal_string;
+                    std::wstring _internal_string;
 
                     // Internal indicator of original gender of the first generated name.
                     gender _gender;
@@ -90,7 +90,7 @@ namespace dasmig
             static ng& instance() { static ng instance; return instance; }
 
             // Translates ISO 3166 2-letter country code to internal culture enum, unknown or unsupported code will be translated as any.
-            static culture to_culture(const std::string& country_code) { return (_country_code_map.find(country_code) != _country_code_map.end()) ? _country_code_map.at(country_code) : culture::any; }
+            static culture to_culture(const std::wstring& country_code) { return (_country_code_map.find(country_code) != _country_code_map.end()) ? _country_code_map.at(country_code) : culture::any; }
 
             // Generates a first name based on requested gender and culture.
             name get_name(gender gender = gender::any, culture culture = culture::any) const { return solver(true, gender, culture); };
@@ -108,28 +108,28 @@ namespace dasmig
 
         private:
             // Typedef to avoid type horror when defining a pointer to a container of names.
-            typedef std::shared_ptr<std::vector<std::string>> name_container;
+            typedef std::shared_ptr<std::vector<std::wstring>> name_container;
 
             // Maps ISO 3166 2-letter country codes to internal culture enum.
-            static const inline std::map<std::string, culture> _country_code_map = {
-                { "us" , culture::american },
-                { "au" , culture::australian },
-                { "br" , culture::brazilian },
-                { "gb" , culture::british },
-                { "bg" , culture::bulgarian },
-                { "ca" , culture::canadian },
-                { "cn" , culture::chinese },
-                { "dk" , culture::danish },
-                { "fi" , culture::finnish },
-                { "fr" , culture::french },
-                { "de" , culture::german },
-                { "kz" , culture::kazakhstan },
-                { "no" , culture::norwegian },
-                { "pl" , culture::polish },
-                { "ru" , culture::russian },
-                { "se" , culture::swedish },
-                { "tr" , culture::turkish },
-                { "ua" , culture::ukrainian }
+            static const inline std::map<std::wstring, culture> _country_code_map = {
+                { L"us" , culture::american },
+                { L"au" , culture::australian },
+                { L"br" , culture::brazilian },
+                { L"gb" , culture::british },
+                { L"bg" , culture::bulgarian },
+                { L"ca" , culture::canadian },
+                { L"cn" , culture::chinese },
+                { L"dk" , culture::danish },
+                { L"fi" , culture::finnish },
+                { L"fr" , culture::french },
+                { L"de" , culture::german },
+                { L"kz" , culture::kazakhstan },
+                { L"no" , culture::norwegian },
+                { L"pl" , culture::polish },
+                { L"ru" , culture::russian },
+                { L"se" , culture::swedish },
+                { L"tr" , culture::turkish },
+                { L"ua" , culture::ukrainian }
             };
 
             // Default folder to look for names and surnames resources. 
@@ -213,13 +213,13 @@ namespace dasmig
             };
 
             // Translates possible gender strings to gender enum.
-            static gender to_gender(const std::string& gender_string) 
+            static gender to_gender(const std::wstring& gender_string) 
             {
-                static const std::map<std::string, gender> gender_map = {
-                    { "m", gender::m },
-                    { "f", gender::f },
-                    { "male", gender::m },
-                    { "female", gender::f }
+                static const std::map<std::wstring, gender> gender_map = {
+                    { L"m", gender::m },
+                    { L"f", gender::f },
+                    { L"male", gender::m },
+                    { L"female", gender::f }
                 };
 
                 return (gender_map.find(gender_string) != gender_map.end()) ? gender_map.at(gender_string) : gender::any; 
@@ -229,16 +229,16 @@ namespace dasmig
             void parse_file(const std::filesystem::path& file) 
             {
                 // Expected names file format is <ISO 3166 2-letter country code>, <m(ale)|f(emale)|s(urname)>, list of names.
-                std::ifstream tentative_file(file);
+                std::wifstream tentative_file(file);
 
                 // If managed to open the file proceed.
                 if (tentative_file.is_open())
                 {
                     // Expected delimiter character.
-                    const char delimiter('\n');
+                    const wchar_t delimiter('\n');
 
                     // Line being read from the file.
-                    std::string file_line;
+                    std::wstring file_line;
 
                     // Culture read from file header.
                     culture culture_read = culture::any;
@@ -247,7 +247,7 @@ namespace dasmig
                     gender gender_read = gender::any;
 
                     // List of parsed names.
-                    name_container names_read = std::make_shared<std::vector<std::string>>();
+                    name_container names_read = std::make_shared<std::vector<std::wstring>>();
 
                     // Retrieves culture from file being read.
                     if (std::getline(tentative_file, file_line, delimiter))
