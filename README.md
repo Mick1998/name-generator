@@ -25,7 +25,7 @@ The library currently supports the following:
   - [ ] China
   - [ ] Denmark
   - [ ] Finland
-  - [ ] France
+  - [x] France
   - [ ] Germany
   - [ ] Kazakhstan
   - [ ] Norway
