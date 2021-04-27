@@ -18,7 +18,7 @@ The library currently supports the following:
 - **Full Name**. Easily append one or more names and surnames to generate a full name with an intuitive API.
 
 - **Countries Supported**. Currently the following countries are supported by the library and contain a relevant database (unchecked countries are currently lacking or contain an incomplete database): 
-  - [ ] Australia
+  - [X] Australia
   - [X] Brazil
   - [ ] Bulgaria
   - [ ] Canada
@@ -32,9 +32,9 @@ The library currently supports the following:
   - [ ] Poland
   - [ ] Russia
   - [X] Sweden
-  - [ ] Turkey
+  - [X] Turkey
   - [ ] Ukraine
-  - [ ] United Kingdom
+  - [X] United Kingdom
   - [x] United States of America
 
 
