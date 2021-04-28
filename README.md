@@ -27,10 +27,10 @@ The library currently supports the following:
   - [X] Finland
   - [x] France
   - [X] Germany
-  - [ ] Kazakhstan
+  - [X] Kazakhstan
   - [X] Norway
   - [ ] Poland
-  - [ ] Russia
+  - [X] Russia
   - [X] Sweden
   - [X] Turkey
   - [ ] Ukraine
