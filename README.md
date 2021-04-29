@@ -30,6 +30,7 @@ The library currently supports the following:
   - [X] Kazakhstan
   - [X] Norway
   - [X] Poland
+  - [X] Portugal
   - [X] Russia
   - [X] Sweden
   - [X] Turkey
