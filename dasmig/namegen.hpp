@@ -19,6 +19,7 @@ namespace dasmig
             enum class culture
             {
                 american,
+                argentinian,
                 australian,
                 brazilian,
                 british,
@@ -30,6 +31,7 @@ namespace dasmig
                 french,
                 german,
                 kazakh,
+                mexican,
                 norwegian,
                 polish,
                 portuguese,
@@ -114,6 +116,7 @@ namespace dasmig
 
             // Maps ISO 3166 2-letter country codes to internal culture enum.
             static const inline std::map<std::wstring, culture> _country_code_map = {
+                { L"ar" , culture::argentinian },
                 { L"us" , culture::american },
                 { L"au" , culture::australian },
                 { L"br" , culture::brazilian },
@@ -126,6 +129,7 @@ namespace dasmig
                 { L"fr" , culture::french },
                 { L"de" , culture::german },
                 { L"kz" , culture::kazakh },
+                { L"mx" , culture::mexican },
                 { L"no" , culture::norwegian },
                 { L"pl" , culture::polish },
                 { L"pt" , culture::portuguese },

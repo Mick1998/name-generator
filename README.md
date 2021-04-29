@@ -19,6 +19,7 @@ The library currently supports the following:
 
 - **Countries Supported**. Currently the following countries are supported by the library and contain a relevant database (unchecked countries are currently lacking or contain an incomplete database): 
   - [X] Australia
+  - [X] Argentina
   - [X] Brazil
   - [X] Bulgaria
   - [X] Canada
@@ -28,6 +29,7 @@ The library currently supports the following:
   - [x] France
   - [X] Germany
   - [X] Kazakhstan
+  - [X] Mexico
   - [X] Norway
   - [X] Poland
   - [X] Portugal
@@ -56,5 +58,7 @@ to the files you want to generate names/surnames and set the necessary switches 
 Additionally you must supply the name generator with the [`resources`](https://github.com/dasmig/name-generator/resources) folder also available in the [release](https://github.com/dasmig/name-generator/releases).
 
 ### Disclaimer
+
+Ukraine and Russia surnames are all in their male or neutral versions.
 
 This README was heavily inspired by ['nlhomann/json'](https://github.com/nlohmann/json).
