@@ -34,6 +34,7 @@ namespace dasmig
                 polish,
                 portuguese,
                 russian,
+                spanish,
                 swedish,
                 turkish,
                 ukrainian,
@@ -129,6 +130,7 @@ namespace dasmig
                 { L"pl" , culture::polish },
                 { L"pt" , culture::portuguese },
                 { L"ru" , culture::russian },
+                { L"es" , culture::spanish },
                 { L"se" , culture::swedish },
                 { L"tr" , culture::turkish },
                 { L"ua" , culture::ukrainian }

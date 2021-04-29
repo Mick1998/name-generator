@@ -32,6 +32,7 @@ The library currently supports the following:
   - [X] Poland
   - [X] Portugal
   - [X] Russia
+  - [x] Spain
   - [X] Sweden
   - [X] Turkey
   - [X] Ukraine
