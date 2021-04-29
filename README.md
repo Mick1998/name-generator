@@ -29,11 +29,11 @@ The library currently supports the following:
   - [X] Germany
   - [X] Kazakhstan
   - [X] Norway
-  - [ ] Poland
+  - [X] Poland
   - [X] Russia
   - [X] Sweden
   - [X] Turkey
-  - [ ] Ukraine
+  - [X] Ukraine
   - [X] United Kingdom
   - [x] United States of America
 
