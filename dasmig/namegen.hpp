@@ -162,13 +162,13 @@ namespace dasmig
             name solver(bool is_name, gender requested_gender, culture requested_culture) const 
             {
                 // Utilized in case gender or culture is any.
-                static std::random_device random_device;
+                std::random_device random_device;
 
                 // Distribution of possible culture values.  
-                static std::uniform_int_distribution<std::size_t> culture_range(0, static_cast<std::size_t>(culture::any) - 1);
+                std::uniform_int_distribution<std::size_t> culture_range(0, static_cast<std::size_t>(culture::any) - 1);
 
                 // Distribution of possible gender values.  
-                static std::uniform_int_distribution<std::size_t> gender_range(0, static_cast<std::size_t>(gender::any) - 1);
+                std::uniform_int_distribution<std::size_t> gender_range(0, static_cast<std::size_t>(gender::any) - 1);
 
                 // Randomly select a culture if necessary.
                 if (requested_culture == culture::any)
