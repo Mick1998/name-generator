@@ -44,7 +44,7 @@ The library currently supports the following:
 
 ## Integration
  
-[`namegen.hpp`](https://github.com/dasmig/name-generator/namegen.hpp) is the single required file [released here](https://github.com/dasmig/name-generator/releases). You need to add
+[`namegen.hpp`](https://github.com/dasmig/name-generator/blob/master/dasmig/namegen.hpp) is the single required file [released here](https://github.com/dasmig/name-generator/releases). You need to add
 
 ```cpp
 #include <dasmig/namegen.hpp>
@@ -55,7 +55,7 @@ using ng = dasmig::ng;
 
 to the files you want to generate names/surnames and set the necessary switches to enable C++17 (e.g., `-std=c++17` for GCC and Clang).
 
-Additionally you must supply the name generator with the [`resources`](https://github.com/dasmig/name-generator/resources) folder also available in the [release](https://github.com/dasmig/name-generator/releases).
+Additionally you must supply the name generator with the [`resources`](https://github.com/dasmig/name-generator/tree/master/resources) folder also available in the [release](https://github.com/dasmig/name-generator/releases).
 
 ## Usage
 
