@@ -57,6 +57,44 @@ to the files you want to generate names/surnames and set the necessary switches 
 
 Additionally you must supply the name generator with the [`resources`](https://github.com/dasmig/name-generator/resources) folder also available in the [release](https://github.com/dasmig/name-generator/releases).
 
+## Usage
+
+It's important to note that due to the necessity of supporting multiple cultures characters and the way std::string works on windows, this library uses std::wstring to return the generated names.
+
+When requesting a name for the first time the library will attempt to load the resource files containing each country databases (the default path is ./resources). It's important to manually load the resources folder if it's present in a different location. The library will recursively iterate through all entries in the loading directory, so only a single call to the root folder containing the name databases is necessary.
+
+```cpp
+
+using ng = dasmig::ng;
+
+// Manually load the resources folder if necessary.
+ng::instance().load("path//containing//names");
+
+// Generates a name of any culture and any gender.
+std::wstring name = ng::instance().get_name();
+
+// Generates a female name of any culture.
+std::wstring female_name = ng::instance().get_name(ng::gender::f);
+
+// Generates a male name of bulgarian culture.
+std::wstring bulgarian_name = ng::instance().get_name(ng::gender::m, ng::culture::bulgarian);
+
+// Generates a male name of any gender and any culture and append two surnames of same culture.
+std::wstring full_name = ng::instance().get_name().append_surname().append_surname();
+
+// Output to stream a french female name with a surname.
+std::wcout << ng::instance().get_name(ng::gender::f, ng::culture::french).append_surname();
+
+```
+
+## Planned Features
+
+- **Deterministic Generation**. The user is capable of seeding the random generator.
+
+- **Specialized Support for Surnames**. Appropriate handling of gendered surnames present in some cultures.
+
+- **ISO 2-Letter Code**. API allowing request through countries 2-Letter code along the library enum.
+
 ### Disclaimer
 
 Ukraine and Russia surnames are all in their male or neutral versions.
